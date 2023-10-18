@@ -4,14 +4,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from fastapi import FastAPI
 from pydantic import BaseModel
+from enum import Enum
 
 app = FastAPI()
 
 # Carregue o arquivo de dados
 cropdf = pd.read_csv("Crop_recommendation.csv")
 
-# Selecione os recursos desejados (4 no total)
-features = ['N', 'P', 'K', 'temperature', 'humidity', 'rainfall']
+# Selecione todos os recursos necessários
+features = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
 X = cropdf[features]
 y = cropdf['label']
 
@@ -21,15 +22,24 @@ model = lgb.LGBMClassifier()
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
+# Enum para as estações
+class Season(str, Enum):
+    VERAO = "VERAO"
+    INVERNO = "INVERNO"
+
 class InputData(BaseModel):
     nitrogen: float
     phosphorus: float
     potassium: float
-    temp_humidity_avg: float
+    temperature: float
+    humidity: float
+    ph: float
+    rainfall: float
+    season: Season
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return "Rodando.."
 
 @app.get("/infos")
 def get_metrics():
@@ -40,24 +50,46 @@ def get_metrics():
     class_report = classification_report(y_test, y_pred, output_dict=True)
 
     metrics = {
-        "LightGBM Model Accuracy": accuracy,
-        "Training-set Accuracy": training_accuracy,
-        "Training Set Score": training_set_score,
-        "Test Set Score": test_set_score,
-        "Classification Report": class_report
+        "Precisão do Modelo LightGBM": accuracy,
+        "Precisão do Conjunto de Treinamento": training_accuracy,
+        "Pontuação do Conjunto de Treinamento": training_set_score,
+        "Pontuação do Conjunto de Teste": test_set_score,
+        "Relatório de Classificação": class_report
     }
 
     return metrics
 
 @app.post("/predict/")
 async def predict_data(data: InputData):
+    if data.season == Season.VERAO:
+        data.temperature = 26
+        data.humidity = 85
+        data.rainfall = 203
+    elif data.season == Season.INVERNO:
+        data.temperature = 15
+        data.humidity = 45
+        data.rainfall = 88
+    
     input_data = [[
         data.nitrogen,
         data.phosphorus,
         data.potassium,
-        data.temp_humidity_avg,
+        data.temperature,
+        data.humidity,
+        data.ph,
+        data.rainfall,
     ]]
     
     prediction = model.predict(input_data)
     
-    return {"prediction": prediction[0]}
+    # Mapeie o número da cultura recomendada para o nome da cultura com base nos dados do CSV
+    crop_mapping = {
+        "maize": "Milho",
+        "coffee": "Café",
+        "orange": "Laranja",
+        # Adicione mais mapeamentos para outras culturas aqui
+    }
+    
+    recommended_crop_name = crop_mapping.get(prediction[0], "Cultura Desconhecida")
+    
+    return {recommended_crop_name: data.dict()}
