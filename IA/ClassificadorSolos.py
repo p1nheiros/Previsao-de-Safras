@@ -1,3 +1,5 @@
+#BIBLIOTECAS IMPORTADAS
+
 import pandas as pd
 import numpy as np
 import random
@@ -11,10 +13,12 @@ from plotly.subplots import make_subplots
 from sklearn.model_selection import train_test_split
 import lightgbm as lgb
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
 
 colorarr = ['#0592D0','#Cd7f32', '#E97451', '#Bdb76b', '#954535', '#C2b280', '#808000','#C2b280', '#E4d008', '#9acd32', '#Eedc82', '#E4d96f',
            '#32cd32','#39ff14','#00ff7f', '#008080', '#36454f', '#F88379', '#Ff4500', '#Ffb347', '#A94064', '#E75480', '#Ffb6c1', '#E5e4e2',
            '#Faf0e6', '#8c92ac', '#Dbd7d2','#A7a6ba', '#B38b6d']
+#PEGAR O ARQUIVO DE TREINO
 cropdf = pd.read_csv("Crop_recommendation.csv")
 cropdf.head()
 cropdf.shape
@@ -35,5 +39,17 @@ accuracy=accuracy_score(y_pred, y_test)
 print('LightGBM Model accuracy score: {0:0.4f}'.format(accuracy_score(y_test, y_pred)))
 y_pred_train = model.predict(X_train)
 print('Training-set accuracy score: {0:0.4f}'. format(accuracy_score(y_train, y_pred_train)))
+print('Training set score: {:.4f}'.format(model.score(X_train, y_train)))
+print('Test set score: {:.4f}'.format(model.score(X_test, y_test)))
+print(classification_report(y_test, y_pred))
+
+
+#INFORMAÇÕES:
+#PRIMEIRO NUMERO É O NITROGENIO
+#SEGUNDO NUMERO É O FOSFORO
+#TERCEIRO NUMERO É O POTACIO
+#QUARTO NUMERO É A MÉDIA DA TEMPERATURA E HUMIDADE
 newdata=model.predict([[90, 42, 43, 20.879744, 75, 5.5,220]])
-newdata
+#dsad
+
+print(newdata)
