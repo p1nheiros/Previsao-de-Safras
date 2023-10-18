@@ -3,15 +3,14 @@
 import pandas as pd
 import numpy as np
 import random
-
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 import plotly.graph_objects as go
 import plotly.express as px
+import lightgbm as lgb
+
 from plotly.subplots import make_subplots
 from sklearn.model_selection import train_test_split
-import lightgbm as lgb
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
@@ -28,12 +27,10 @@ crop_summary.head()
 X = cropdf.drop('label', axis=1)
 y = cropdf['label']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3,
-                                                    shuffle = True, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, shuffle = True, random_state = 0)
 model = lgb.LGBMClassifier()
 model.fit(X_train, y_train)
 y_pred=model.predict(X_test)
-
 
 accuracy=accuracy_score(y_pred, y_test)
 print('LightGBM Model accuracy score: {0:0.4f}'.format(accuracy_score(y_test, y_pred)))
@@ -43,13 +40,16 @@ print('Training set score: {:.4f}'.format(model.score(X_train, y_train)))
 print('Test set score: {:.4f}'.format(model.score(X_test, y_test)))
 print(classification_report(y_test, y_pred))
 
-
 #INFORMAÇÕES:
-#PRIMEIRO NUMERO É O NITROGENIO
-#SEGUNDO NUMERO É O FOSFORO
-#TERCEIRO NUMERO É O POTACIO
-#QUARTO NUMERO É A MÉDIA DA TEMPERATURA E HUMIDADE
-newdata=model.predict([[90, 42, 43, 20.879744, 75, 5.5,220]])
-#dsad
+#N = NITROGENIO
+#P = FOSFORO
+#K = POTACIO
+#TEMP = TEMPERATURA
+#HUM = HUMIDADE
+#PH = PH
+#INDICE = INDICE DE CHUVAS
 
+#AQUI VC COLOCA AS INFORMAÇÕES DESSES VALORES E ELE FALA QUAL É MAIS RECOMENDADA NESSE TIPO DE SOLO
+#                        N   P   K  Temp      HUM   PH  INDICE
+newdata=model.predict([[90, 42, 43, 20.879744, 75, 5.5,220]])
 print(newdata)
