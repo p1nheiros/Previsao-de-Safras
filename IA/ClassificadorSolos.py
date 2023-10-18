@@ -51,5 +51,7 @@ print(classification_report(y_test, y_pred))
 
 #AQUI VC COLOCA AS INFORMAÇÕES DESSES VALORES E ELE FALA QUAL É MAIS RECOMENDADA NESSE TIPO DE SOLO
 #                        N   P   K  Temp      HUM   PH  INDICE
-newdata=model.predict([[90, 42, 43, 20.879744, 75, 5.5,220]])
+newdata=model.predict([[90, 42, 43, 26, 85, 5.5,203]])
+newdata2=model.predict([[90, 42, 43, 15, 45, 5.5,88]])
 print(newdata)
+print(newdata2)
