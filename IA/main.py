@@ -3,10 +3,20 @@ import lightgbm as lgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware  # Importe o CORSMiddleware
 from pydantic import BaseModel
 from enum import Enum
 
 app = FastAPI()
+
+# Configuração do CORS para permitir solicitações de todos os origens
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Carregue o arquivo de dados
 cropdf = pd.read_csv("Crop_recommendation.csv")
@@ -92,4 +102,4 @@ async def predict_data(data: InputData):
     
     recommended_crop_name = crop_mapping.get(prediction[0], "Cultura Desconhecida")
     
-    return {recommended_crop_name: data.dict()}
+    return {"recommended_crop_name": recommended_crop_name}
