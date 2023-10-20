@@ -5,7 +5,7 @@
 
   <h1 align="center">AgroSync</h1>
 
-  > Previsão de Safra Inteligente | Aplicação de IA Agricultura de Precisão.
+  > Previsão de Safra Inteligente | Aplicação de IA Agricultura de Precisão, possibilita a previsão da melhor safra a se produzir com base nos dados solicitados no sistema.
 
   <a href="https://github.com/BrunoCarmoS2004/Hackathon-Integrada-IA"><strong>➥ Visualizar Projeto</strong></a>
 
@@ -28,13 +28,13 @@ Para executar o repositório localmente, execute este comando no seu git bash:
 Linux and macOS:
 
 ```bash
-sudo git clone https://github.com/BrunoCarmoS2004/Hackathon-Integrada-IA.git
+sudo git clone https://github.com/p1nheiros/Previsao-de-Safras.git
 ```
 
 Windows:
 
 ```bash
-git clone https://github.com/BrunoCarmoS2004/Hackathon-Integrada-IA.git
+git clone https://github.com/p1nheiros/Previsao-de-Safras.git
 ```
 
 
