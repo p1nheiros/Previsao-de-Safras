@@ -66,14 +66,6 @@ git clone https://github.com/p1nheiros/Previsao-de-Safras.git
         </sub>
       </a>
     </td>
-    <td>
-      <a href="https://github.com/RafaeladaCunha">
-        <img src="https://avatars.githubusercontent.com/u/124809624?v=4" width="100px;" alt="Rafaela da Cunha"/><br>
-        <sub>
-          <b>Rafaela da Cunha</b>
-        </sub>
-      </a>
-    </td>
   </tr>
 </table>
 
